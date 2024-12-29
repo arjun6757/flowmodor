@@ -63,11 +63,11 @@ export default function TaskSelector() {
           showArrow
           color="secondary"
           placement="bottom"
-          content={items[0].rendered}
+          content={items[0] ? items[0].rendered : 'Select a task'}
           aria-label="tooltip"
           delay={500}
         >
-          <div className="truncate max-w-[9rem]">{items[0].rendered}</div>
+          <div className="truncate max-w-[9rem]">{items[0] ? items[0].rendered : 'Select a task'}</div>
         </Tooltip>
       )}
       classNames={{
