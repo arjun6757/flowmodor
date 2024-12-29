@@ -9,9 +9,10 @@ import {
 
 type ParentProps = {
   open: boolean;
+  escape: () => void;
 };
 
-export default function TaskSelector({ open }: ParentProps) {
+export default function TaskSelector({ open, escape }: ParentProps) {
   const tasks = useTasks();
   const focusingTask = useFocusingTask();
   const { focusTask, unfocusTask } = useTasksActions();
@@ -26,7 +27,10 @@ export default function TaskSelector({ open }: ParentProps) {
             unfocusTask();
           } else {
             focusTask(task);
+            escape();
           }
+        } else if (event.key === 'Escape') {
+          escape();
         }
       }}
       onClick={() => {
@@ -34,6 +38,7 @@ export default function TaskSelector({ open }: ParentProps) {
           unfocusTask();
         } else {
           focusTask(task);
+          escape();
         }
       }}
       classNames={{
@@ -51,7 +56,7 @@ export default function TaskSelector({ open }: ParentProps) {
       size="sm"
       selectionMode="single"
       aria-label="select a task"
-      renderValue={() => ""}
+      renderValue={() => ''}
       classNames={{
         trigger:
           'bg-transparent text-transparent border-none outline-none data-[hover=true]:bg-transparent pointer-events-none',
