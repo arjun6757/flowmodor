@@ -1,5 +1,6 @@
+import { Period } from '@flowmodor/stores/stats';
 import { Select, SelectItem } from '@nextui-org/select';
-import { Period, usePeriod, useStatsActions } from '@/stores/useStatsStore';
+import { usePeriod, useStatsActions } from '@/hooks/useStats';
 
 export default function PeriodSelector() {
   const { onPeriodChange } = useStatsActions();
@@ -7,7 +8,6 @@ export default function PeriodSelector() {
 
   return (
     <Select
-      size="sm"
       radius="sm"
       selectionMode="single"
       classNames={{
@@ -39,7 +39,7 @@ export default function PeriodSelector() {
           base: 'data-[focus=true]:!bg-secondary data-[hover=true]:!bg-secondary',
         }}
       >
-        <div className="flex gap-2 items-center">Week</div>
+        <div className="flex items-center gap-2">Week</div>
       </SelectItem>
     </Select>
   );

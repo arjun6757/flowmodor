@@ -1,12 +1,9 @@
 import { Select, SelectItem } from '@nextui-org/select';
 import { Tooltip } from '@nextui-org/tooltip';
-import {
-  useFocusingTask,
-  useTasks,
-  useTasksActions,
-} from '@/stores/useTasksStore';
-import { useMode, useStatus } from '@/stores/useTimerStore';
+import { useFocusingTask, useTasks, useTasksActions } from '@/hooks/useTasks';
+import { useMode, useStatus } from '@/hooks/useTimer';
 import { RightArrow } from '../Icons';
+import Markdown from '../Markdown';
 
 export default function TaskSelector() {
   const tasks = useTasks();
@@ -32,7 +29,7 @@ export default function TaskSelector() {
           }
         }
       }}
-      onClick={() => {
+      onPress={() => {
         if (focusingTask === task) {
           unfocusTask();
         } else {
@@ -43,7 +40,7 @@ export default function TaskSelector() {
         base: 'data-[hover=true]:!bg-secondary data-[focus=true]:!bg-secondary',
       }}
     >
-      {task.name}
+      <Markdown>{task.name}</Markdown>
     </SelectItem>
   ));
 
@@ -67,7 +64,7 @@ export default function TaskSelector() {
           aria-label="tooltip"
           delay={500}
         >
-          <div className="truncate max-w-[9rem]">{items[0] ? items[0].rendered : 'Select a task'}</div>
+          <div className="max-w-[9rem] truncate">{items[0].rendered}</div>
         </Tooltip>
       )}
       classNames={{
@@ -77,6 +74,7 @@ export default function TaskSelector() {
         innerWrapper: 'w-min h-min',
         value: 'text-center w-min',
         selectorIcon: 'static',
+        base: 'w-[22rem]',
       }}
     >
       {selectItems}

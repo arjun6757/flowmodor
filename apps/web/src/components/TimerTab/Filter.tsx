@@ -6,8 +6,8 @@ import {
   useIsLoadingLists,
   useLabels,
   useTasksActions,
-} from '@/stores/useTasksStore';
-import { useMode, useStatus } from '@/stores/useTimerStore';
+} from '@/hooks/useTasks';
+import { useMode, useStatus } from '@/hooks/useTimer';
 
 export default function Filter() {
   const status = useStatus();
@@ -34,7 +34,9 @@ export default function Filter() {
         popoverContent: 'bg-background',
       }}
       selectedKeys={activeLabel !== '' ? [activeLabel] : []}
-      onChange={onLabelChange}
+      onChange={(e) => {
+        onLabelChange(e.target.value);
+      }}
     >
       {labels.map((label) => (
         <SelectItem

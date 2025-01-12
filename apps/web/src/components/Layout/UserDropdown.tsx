@@ -8,11 +8,12 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/dropdown';
+import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { signOut } from '@/actions/auth';
-import { User } from '../Icons';
+import { User as UserIcon } from '../Icons';
 
-export default function UserDropdown({ user }: { user: any }) {
+export default function UserDropdown({ user }: { user: User | null }) {
   return (
     <Dropdown
       classNames={{
@@ -27,7 +28,7 @@ export default function UserDropdown({ user }: { user: any }) {
           isBordered
           showFallback
           src={user?.user_metadata?.avatar_url}
-          fallback={<User />}
+          fallback={<UserIcon />}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="user info menu">
@@ -35,14 +36,15 @@ export default function UserDropdown({ user }: { user: any }) {
           <DropdownItem
             key="info"
             textValue="info"
-            className="data-[focus=true]:outline-none data-[focus=true]:bg-transparent data-[hover=true]:bg-transparent pointer-events-none"
+            className="pointer-events-none data-[focus=true]:bg-transparent data-[hover=true]:bg-transparent data-[focus=true]:outline-none"
           >
-            <div className="text-foreground-500 text-xs">Signed in as</div>
+            <div className="text-xs text-foreground-500">Signed in as</div>
             <div>{user.email}</div>
             <Divider className="mt-3" />
           </DropdownItem>
         )}
         <DropdownItem
+          key="x"
           as={Link}
           href="https://x.com/flowmodor"
           target="_blank"

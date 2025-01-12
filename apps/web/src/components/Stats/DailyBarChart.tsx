@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LogsWithTasks } from '@flowmodor/types';
 import {
   BarElement,
@@ -10,7 +11,7 @@ import {
 } from 'chart.js';
 import { ForwardedRef, forwardRef, memo } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { useStartDate } from '@/stores/useStatsStore';
+import { useStartDate } from '@/hooks/useStats';
 import { dailyLogToChartData } from '@/utils';
 
 ChartJS.register(
@@ -25,7 +26,7 @@ ChartJS.register(
 const options = {
   responsive: true,
   interaction: {
-    mode: 'dataset' as 'dataset',
+    mode: 'dataset' as const,
   },
   scales: {
     x: {
@@ -67,7 +68,7 @@ const options = {
   plugins: {
     setBackground: {},
     tooltip: {
-      position: 'nearest' as 'nearest',
+      position: 'nearest' as const,
       boxPadding: 2,
       usePointStyle: true,
       backgroundColor: '#131221',

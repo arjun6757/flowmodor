@@ -17,7 +17,7 @@ import {
   usePeriod,
   useStartDate,
   useStatsActions,
-} from '@/stores/useStatsStore';
+} from '@/hooks/useStats';
 import { calculateFocusTime } from '@/utils/stats/calculateFocusTime';
 import copyImageToClipboard from '@/utils/stats/copyImageToClipboard';
 import PeriodSelector from './PeriodSelector';
@@ -30,14 +30,14 @@ export default function StatsCard() {
   const { totalFocusTime } = calculateFocusTime(logs ?? []);
   const { goPreviousTime, goNextTime, updateLogs, setDate } = useStatsActions();
   const displayTime = useDisplayTime();
-  const chartRef = useRef<any>(null);
+  const chartRef = useRef(null);
   const effectRunRef = useRef(false);
   const period = usePeriod();
   const isDisabled = useIsDisabled();
   const [isLoading, startTransition] = useTransition();
 
   const dateText =
-    startDate.getTime() === endDate.getTime()
+    startDate.toDateString() === endDate.toDateString()
       ? startDate.toDateString()
       : `${startDate.toDateString()} - ${endDate.toDateString()}`;
 
@@ -52,9 +52,9 @@ export default function StatsCard() {
   return (
     <Card className="h-full bg-midground p-2 pb-0">
       <CardHeader className="flex flex-col gap-1">
-        <div className="flex justify-center w-full items-center gap-5 font-semibold">
+        <div className="flex w-full items-center justify-center gap-5 font-semibold">
           <PeriodSelector />
-          <div className="mx-auto flex gap-5 items-center">
+          <div className="mx-auto flex items-center gap-5">
             <DateButton onPress={goPreviousTime} ariaLabel="Previous day">
               <Left />
             </DateButton>
@@ -71,7 +71,8 @@ export default function StatsCard() {
             radius="sm"
             color="secondary"
             className="hidden sm:block"
-            onClick={() => {
+            disableRipple
+            onPress={() => {
               setDate(new Date());
             }}
           >
@@ -91,41 +92,50 @@ export default function StatsCard() {
               radius="sm"
               color="secondary"
               className="hidden sm:flex"
-              onClick={() => {
+              disableRipple
+              onPress={() => {
                 startTransition(async () => {
-                  const success = await copyImageToClipboard(
+                  const imageUrl = await copyImageToClipboard(
                     chartRef,
                     totalFocusTime,
                     dateText,
                   );
-                  if (success) {
-                    toast.success(
-                      <div>
-                        Your stats image is copied to clipboard. Share it to{' '}
-                        <Link
-                          target="_blank"
-                          href="https://x.com/intent/tweet?text=Stay in flow with @flowmodor%0A(Ctrl%2BV/⌘%2BV to paste your stats image)"
-                          className="text-[#DBBFFF]"
-                        >
-                          X
-                        </Link>
-                        ,{' '}
-                        <Link
-                          target="_blank"
-                          href="https://www.linkedin.com/sharing/share-offsite/"
-                          className="text-[#DBBFFF]"
-                        >
-                          LinkedIn
-                        </Link>
-                        ,{' '}
-                        <Link
-                          target="_blank"
-                          href="https://reddit.com/submit?title=(Ctrl%2BV/⌘%2BV to paste your stats image)&type=image"
-                          className="text-[#DBBFFF]"
-                        >
-                          Reddit
-                        </Link>{' '}
-                        or anywhere you want!
+
+                  if (imageUrl) {
+                    toast(
+                      <div className="flex flex-col gap-2">
+                        <img
+                          src={imageUrl}
+                          draggable={false}
+                          alt="Stats preview"
+                        />
+                        <div>
+                          Copied to clipboard! Share it to{' '}
+                          <Link
+                            target="_blank"
+                            href="https://x.com/intent/tweet?text=Stay in flow with @flowmodor%0A(Ctrl%2BV/⌘%2BV to paste your stats image)"
+                            className="text-[#DBBFFF]"
+                          >
+                            X
+                          </Link>
+                          ,{' '}
+                          <Link
+                            target="_blank"
+                            href="https://www.linkedin.com/sharing/share-offsite/"
+                            className="text-[#DBBFFF]"
+                          >
+                            LinkedIn
+                          </Link>
+                          ,{' '}
+                          <Link
+                            target="_blank"
+                            href="https://reddit.com/submit?title=(Ctrl%2BV/⌘%2BV to paste your stats image)&type=image"
+                            className="text-[#DBBFFF]"
+                          >
+                            Reddit
+                          </Link>{' '}
+                          or anywhere you want!
+                        </div>
                       </div>,
                     );
                   }

@@ -2,10 +2,13 @@
   "name": "@flowmodor/stores",
   "version": "0.1.0",
   "exports": {
-    ".": "./src/stats.ts"
+    "./timer": "./src/timer.ts",
+    "./stats": "./src/stats.ts",
+    "./tasks": "./src/tasks.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.46.1",
+    "@flowmodor/task-sources": "workspace:*",
+    "@supabase/supabase-js": "^2.47.10",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

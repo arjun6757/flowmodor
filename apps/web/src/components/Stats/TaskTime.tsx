@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import { useLogs } from '@/stores/useStatsStore';
+import { useLogs } from '@/hooks/useStats';
 import { calculateFocusTime } from '@/utils/stats/calculateFocusTime';
 import { calculateTaskTime } from '@/utils/stats/calculateTaskTime';
 import TimeFormatter from './TimeFormatter';
@@ -39,8 +39,8 @@ export default function TaskTime() {
   const { totalFocusTime, longestFocusTime } = calculateFocusTime(logs ?? []);
 
   return (
-    <Card className="shrink-0 w-full h-full bg-midground gap-5 p-5">
-      <div className="flex flex-row justify-center shrink-0 gap-10">
+    <Card className="h-full w-full shrink-0 gap-5 bg-midground p-5">
+      <div className="flex shrink-0 flex-row justify-center gap-10">
         <div className="flex flex-col items-center text-sm">
           Total Focus
           <TimeFormatter minutes={totalFocusTime} />

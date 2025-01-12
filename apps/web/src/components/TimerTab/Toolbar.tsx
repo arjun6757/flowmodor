@@ -4,21 +4,14 @@ import { Button } from '@nextui-org/button';
 import { Tooltip } from '@nextui-org/tooltip';
 import { useTransition } from 'react';
 import { Forward, Hide, Pause, Play, Show, Stop } from '@/components/Icons';
-import { useActiveSource, useFocusingTask } from '@/stores/useTasksStore';
-import {
-  useMode,
-  useShowTime,
-  useStatus,
-  useTimerActions,
-} from '@/stores/useTimerStore';
+import { useActiveSource, useFocusingTask } from '@/hooks/useTasks';
+import { useActions, useMode, useShowTime, useStatus } from '@/hooks/useTimer';
 
 export default function Toolbar() {
   const showTime = useShowTime();
   const status = useStatus();
   const mode = useMode();
-
-  const { startTimer, stopTimer, pauseTimer, resumeTimer, toggleShowTime } =
-    useTimerActions();
+  const { start, stop, pause, resume, toggleShowTime } = useActions();
   const [isStopLoading, startStopTransition] = useTransition();
   const [isPauseLoading, startPauseTransition] = useTransition();
   const [isSkipLoading, startSkipTransition] = useTransition();
@@ -41,7 +34,7 @@ export default function Toolbar() {
             isIconOnly
             disableRipple
             aria-label={showTime ? 'Hide time' : 'Show time'}
-            className="bg-secondary w-12 h-12"
+            className="h-12 w-12 bg-secondary"
             onPress={toggleShowTime}
           >
             {showTime ? <Hide /> : <Show />}
@@ -66,13 +59,13 @@ export default function Toolbar() {
           isIconOnly
           disableRipple
           aria-label={status === 'idle' ? 'Start' : 'Stop'}
-          className="bg-secondary w-12 h-12"
+          className="h-12 w-12 bg-secondary"
           onPress={() => {
             startStopTransition(async () => {
               if (status !== 'idle') {
-                await stopTimer(focusingTask, activeSource);
+                await stop(focusingTask, activeSource);
               } else {
-                await startTimer();
+                await start();
               }
             });
           }}
@@ -96,13 +89,13 @@ export default function Toolbar() {
             isIconOnly
             disableRipple
             aria-label={status === 'running' ? 'Pause' : 'Resume'}
-            className="bg-secondary w-12 h-12"
+            className="h-12 w-12 bg-secondary"
             onPress={() => {
               startPauseTransition(async () => {
                 if (status === 'running') {
-                  await pauseTimer(focusingTask, activeSource);
+                  await pause(focusingTask, activeSource);
                 } else {
-                  await resumeTimer();
+                  await resume();
                 }
               });
             }}
@@ -127,10 +120,10 @@ export default function Toolbar() {
             isIconOnly
             disableRipple
             aria-label="Skip break"
-            className="bg-secondary w-12 h-12"
+            className="h-12 w-12 bg-secondary"
             onPress={() => {
               startSkipTransition(async () => {
-                await stopTimer(focusingTask, activeSource);
+                await stop(focusingTask, activeSource);
               });
             }}
           >

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useStatus, useTimerActions } from '@/stores/useTimerStore';
+import { useActions, useStatus } from './useTimer';
 
 export default function useTick() {
   const status = useStatus();
-  const { tickTimer } = useTimerActions();
+  const { tick } = useActions();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -11,15 +11,16 @@ export default function useTick() {
         return;
       }
 
-      tickTimer(() => {
+      tick(() => {
         const audio = new Audio('/alarm.mp3');
         audio.play();
 
-        // eslint-disable-next-line no-new
-        new Notification('Flowmodor', {
-          body: 'Time to get back to work!',
-          icon: '/images/icons/general_icon_x512.png',
-        });
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('Flowmodor', {
+            body: 'Time to get back to work!',
+            icon: '/images/icons/general_icon_x512.png',
+          });
+        }
       });
     }, 1000);
 
@@ -28,5 +29,5 @@ export default function useTick() {
         clearInterval(interval);
       }
     };
-  }, [status, tickTimer]);
+  }, [status, tick]);
 }

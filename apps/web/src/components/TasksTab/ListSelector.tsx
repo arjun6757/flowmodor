@@ -8,8 +8,8 @@ import {
   useIsLoadingLists,
   useLists,
   useTasksActions,
-} from '@/stores/useTasksStore';
-import { useMode, useStatus } from '@/stores/useTimerStore';
+} from '@/hooks/useTasks';
+import { useMode, useStatus } from '@/hooks/useTimer';
 
 export default function ListSelector() {
   const status = useStatus();
@@ -49,10 +49,11 @@ export default function ListSelector() {
       }}
       selectedKeys={activeList ? [activeList] : []}
       onChange={async (e) => {
-        const isSuccess = onListChange(e);
-        if (!isSuccess) {
+        if (e.target.value === '') {
           return;
         }
+
+        onListChange(e.target.value);
         await fetchTasks();
       }}
     >
